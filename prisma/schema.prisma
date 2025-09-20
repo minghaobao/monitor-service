@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// 合约注册表
+model Contract {
+  id              Int      @id @default(autoincrement())
+  chainId         BigInt   @map("chain_id")
+  address         String   @db.VarChar(42)
+  name            String   @db.VarChar(50)
+  abiVersion      String   @map("abi_version") @db.VarChar(20)
+  createdAt       DateTime @default(now()) @map("created_at")
+  
+  // 关联
+  events          Event[]
+  functionCalls   FunctionCall[]
+
+  @@unique([address, chainId])
+  @@index([chainId])
+  @@index([address])
+  @@map("contracts")
+}
+
+// 区块信息
+model Block {
+  id              Int      @id @default(autoincrement())
+  chainId         BigInt   @map("chain_id")
+  blockNumber     BigInt   @map("block_number")
+  blockHash       String   @map("block_hash") @db.VarChar(66)
+  parentHash      String   @map("parent_hash") @db.VarChar(66)
+  timestamp       DateTime
+  finalized       Boolean  @default(false)
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@unique([chainId, blockNumber])
+  @@unique([chainId, blockHash])
+  @@index([chainId])
+  @@index([blockNumber])
+  @@index([blockHash])
+  @@index([chainId, timestamp])
+  @@map("blocks")
+}
+
+// 链上事件
+model Event {
+  id              Int      @id @default(autoincrement())
+  chainId         BigInt   @map("chain_id")
+  blockNumber     BigInt   @map("block_number")
+  txHash          String   @map("tx_hash") @db.VarChar(66)
+  logIndex        Int      @map("log_index")
+  contractAddress String   @map("contract_address") @db.VarChar(42)
+  eventName       String   @map("event_name") @db.VarChar(100)
+  eventSignature  String   @map("event_signature") @db.VarChar(100)
+  args            Json?    @db.Json
+  removed         Boolean  @default(false)
+  timestamp       DateTime
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  // 关联
+  contract        Contract @relation(fields: [contractAddress, chainId], references: [address, chainId])
+
+  @@unique([chainId, txHash, logIndex])
+  @@index([chainId])
+  @@index([blockNumber])
+  @@index([txHash])
+  @@index([contractAddress])
+  @@index([chainId, timestamp])
+  @@map("events")
+}
+
+// 方法调用
+model FunctionCall {
+  id              Int      @id @default(autoincrement())
+  chainId         BigInt   @map("chain_id")
+  blockNumber     BigInt   @map("block_number")
+  txHash          String   @map("tx_hash") @db.VarChar(66)
+  contractAddress String   @map("contract_address") @db.VarChar(42)
+  methodName      String   @map("method_name") @db.VarChar(100)
+  methodSignature String   @map("method_signature") @db.VarChar(100)
+  args            Json?    @db.Json
+  from            String   @db.VarChar(42)
+  value           String   @db.VarChar(78) // wei string
+  status          Boolean  // true = success, false = failed
+  gasUsed         BigInt   @map("gas_used")
+  timestamp       DateTime
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  // 关联
+  contract        Contract @relation(fields: [contractAddress, chainId], references: [address, chainId])
+
+  @@unique([chainId, txHash])
+  @@index([chainId])
+  @@index([blockNumber])
+  @@index([txHash])
+  @@index([contractAddress])
+  @@index([chainId, timestamp])
+  @@map("function_calls")
+}
+
+// 处理进度
+model Checkpoint {
+  id                  Int      @id @default(autoincrement())
+  chainId             BigInt   @map("chain_id") @unique
+  lastProcessedBlock  BigInt   @map("last_processed_block")
+  updatedAt          DateTime @default(now()) @map("updated_at")
+
+  @@map("checkpoints")
+}
+
+// 异常记录
+model Anomaly {
+  id          Int      @id @default(autoincrement())
+  chainId     BigInt   @map("chain_id")
+  type        String   @db.VarChar(50) // missing_block, duplicate_block, reorg
+  key         String   @db.VarChar(100) // block number or hash
+  details     Json?    @db.Json
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([chainId, type])
+  @@index([chainId, createdAt])
+  @@map("anomalies")
+}

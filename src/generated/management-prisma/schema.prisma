@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/management-prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("MANAGEMENT_DATABASE_URL")
+}
+
+// 现有的 management-console 模型
+model User {
+  id         Int       @id @default(autoincrement())
+  address    String    @unique @db.VarChar(42)
+  role       String    @default("user") @db.VarChar(20)
+  createdAt  DateTime  @default(now()) @map("created_at")
+  lastActive DateTime? @map("last_active")
+  metadata   Json?
+
+  meshClaims MeshClaim[]
+
+  @@map("users")
+}
+
+model MeshClaim {
+  id          Int      @id @default(autoincrement())
+  userAddress String   @map("user_address") @db.VarChar(42)
+  meshId      String   @map("mesh_id") @db.VarChar(16)
+  longitude   Decimal? @db.Decimal(11, 8)
+  latitude    Decimal? @db.Decimal(11, 8)
+  txHash      String?  @map("tx_hash") @db.VarChar(66)
+  blockNumber BigInt?  @map("block_number")
+  claimedAt   DateTime @default(now()) @map("claimed_at")
+
+  user User @relation(fields: [userAddress], references: [address])
+  mesh Mesh @relation(fields: [meshId], references: [meshId])
+
+  @@map("mesh_claims")
+}
+
+model Mesh {
+  id            Int       @id @default(autoincrement())
+  meshId        String    @unique @map("mesh_id") @db.VarChar(16)
+  longitude     Decimal   @db.Decimal(11, 8)
+  latitude      Decimal   @db.Decimal(11, 8)
+  heatLevel     Int?      @default(0) @map("heat_level")
+  claimCount    Int?      @default(0) @map("claim_count")
+  lastClaimTime DateTime? @map("last_claim_time")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  claims MeshClaim[]
+
+  @@map("meshes")
+}
+
+// 其他表暂时注释掉，只保留我们需要的
+
+model ContractStatus {
+  id              Int      @id @default(autoincrement())
+  contractName    String   @map("contract_name") @db.VarChar(100)
+  contractAddress String   @map("contract_address") @db.VarChar(42)
+  chainId         BigInt   @default(97) @map("chain_id")
+  isPaused        Boolean  @default(false) @map("is_paused")
+  lastBlock       BigInt   @map("last_block")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@unique([contractAddress, chainId])
+  @@map("contract_status")
+}
+
+model SystemEvent {
+  id        Int      @id @default(autoincrement())
+  eventType String   @map("event_type") @db.VarChar(50)
+  message   String   @default("") @db.Text
+  data      Json?    @db.Json
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("system_events")
+}
+
+model EventLog {
+  id        Int      @id @default(autoincrement())
+  level     String   @db.VarChar(20)
+  message   String   @db.Text
+  data      Json?    @db.Json
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("event_logs")
+}
+
+model SafeConfig {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique @db.VarChar(100)
+  value     String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("safe_config")
+}
