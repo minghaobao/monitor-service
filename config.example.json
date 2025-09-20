@@ -1,0 +1,31 @@
+{
+  "chains": [{
+    "name": "bsc",
+    "chainId": 56,
+    "rpcHttp": "https://bsc-dataseed.binance.org",
+    "rpcWs": "wss://bsc-ws-node.nariox.org",
+    "startBlock": 39000000,
+    "confirmations": 12,
+    "scanBlockSpan": 1500,
+    "parallelRequests": 6,
+    "contracts": [
+      {
+        "name": "Meshes",
+        "address": "0x...",
+        "abiPath": "./abis/Meshes.json"
+      },
+      {
+        "name": "Reward",
+        "address": "0x...",
+        "abiPath": "./abis/Reward.json"
+      },
+      {
+        "name": "FoundationManage",
+        "address": "0x...",
+        "abiPath": "./abis/FoundationManage.json"
+      }
+    ]
+  }]
+}
+
+

@@ -1,0 +1,155 @@
+module.exports = {
+  apps: [
+    // BSC Mainnet
+    {
+      name: 'ngp-monitor-bsc',
+      script: 'dist/index.js',
+      args: 'start --network bsc',
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      max_memory_restart: '1G',
+      env: {
+        NODE_ENV: 'production',
+        CONFIG_PATH: 'config/multi-network.json',
+        MANAGEMENT_DATABASE_URL: process.env.MANAGEMENT_DATABASE_URL,
+        MONITOR_DATABASE_URL: process.env.MONITOR_DATABASE_URL,
+        LOG_LEVEL: 'info',
+      },
+      error_file: './logs/bsc-error.log',
+      out_file: './logs/bsc-out.log',
+      log_file: './logs/bsc-combined.log',
+      time: true,
+    },
+    
+    // BSC Testnet
+    {
+      name: 'ngp-monitor-bsc-testnet',
+      script: 'dist/index.js',
+      args: 'start --network bsc-testnet',
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      max_memory_restart: '1G',
+      env: {
+        NODE_ENV: 'production',
+        CONFIG_PATH: 'config/multi-network.json',
+        MANAGEMENT_DATABASE_URL: process.env.MANAGEMENT_DATABASE_URL,
+        MONITOR_DATABASE_URL: process.env.MONITOR_DATABASE_URL,
+        LOG_LEVEL: 'info',
+      },
+      error_file: './logs/bsc-testnet-error.log',
+      out_file: './logs/bsc-testnet-out.log',
+      log_file: './logs/bsc-testnet-combined.log',
+      time: true,
+    },
+    
+    // Polygon Mainnet
+    {
+      name: 'ngp-monitor-polygon',
+      script: 'dist/index.js',
+      args: 'start --network polygon',
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      max_memory_restart: '1G',
+      env: {
+        NODE_ENV: 'production',
+        CONFIG_PATH: 'config/multi-network.json',
+        MANAGEMENT_DATABASE_URL: process.env.MANAGEMENT_DATABASE_URL,
+        MONITOR_DATABASE_URL: process.env.MONITOR_DATABASE_URL,
+        LOG_LEVEL: 'info',
+      },
+      error_file: './logs/polygon-error.log',
+      out_file: './logs/polygon-out.log',
+      log_file: './logs/polygon-combined.log',
+      time: true,
+    },
+    
+    // Polygon Mumbai Testnet
+    {
+      name: 'ngp-monitor-mumbai',
+      script: 'dist/index.js',
+      args: 'start --network mumbai',
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      max_memory_restart: '1G',
+      env: {
+        NODE_ENV: 'production',
+        CONFIG_PATH: 'config/multi-network.json',
+        MANAGEMENT_DATABASE_URL: process.env.MANAGEMENT_DATABASE_URL,
+        MONITOR_DATABASE_URL: process.env.MONITOR_DATABASE_URL,
+        LOG_LEVEL: 'info',
+      },
+      error_file: './logs/mumbai-error.log',
+      out_file: './logs/mumbai-out.log',
+      log_file: './logs/mumbai-combined.log',
+      time: true,
+    },
+    
+    // Ethereum Mainnet
+    {
+      name: 'ngp-monitor-ethereum',
+      script: 'dist/index.js',
+      args: 'start --network ethereum',
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      max_memory_restart: '1G',
+      env: {
+        NODE_ENV: 'production',
+        CONFIG_PATH: 'config/multi-network.json',
+        MANAGEMENT_DATABASE_URL: process.env.MANAGEMENT_DATABASE_URL,
+        MONITOR_DATABASE_URL: process.env.MONITOR_DATABASE_URL,
+        LOG_LEVEL: 'info',
+      },
+      error_file: './logs/ethereum-error.log',
+      out_file: './logs/ethereum-out.log',
+      log_file: './logs/ethereum-combined.log',
+      time: true,
+    },
+    
+    // Ethereum Goerli Testnet
+    {
+      name: 'ngp-monitor-goerli',
+      script: 'dist/index.js',
+      args: 'start --network goerli',
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      max_memory_restart: '1G',
+      env: {
+        NODE_ENV: 'production',
+        CONFIG_PATH: 'config/multi-network.json',
+        MANAGEMENT_DATABASE_URL: process.env.MANAGEMENT_DATABASE_URL,
+        MONITOR_DATABASE_URL: process.env.MONITOR_DATABASE_URL,
+        LOG_LEVEL: 'info',
+      },
+      error_file: './logs/goerli-error.log',
+      out_file: './logs/goerli-out.log',
+      log_file: './logs/goerli-combined.log',
+      time: true,
+    },
+    
+    // API Server
+    {
+      name: 'ngp-monitor-api',
+      script: 'dist/api/index.js',
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      max_memory_restart: '512M',
+      env: {
+        NODE_ENV: 'production',
+        API_PORT: 3001,
+        MONITOR_DATABASE_URL: process.env.MONITOR_DATABASE_URL,
+        LOG_LEVEL: 'info',
+      },
+      error_file: './logs/api-error.log',
+      out_file: './logs/api-out.log',
+      log_file: './logs/api-combined.log',
+      time: true,
+    },
+  ],
+};

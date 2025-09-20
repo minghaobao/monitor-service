@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  monitor:
+    build: .
+    environment:
+      - DATABASE_URL=mysql://root:@mysql:3306/ngp_management
+      - NODE_ENV=production
+      - LOG_LEVEL=info
+    volumes:
+      - ./config:/app/config
+      - ./abis:/app/abis
+    depends_on:
+      - mysql
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=ngp_management
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+volumes:
+  mysql_data:
+
+
