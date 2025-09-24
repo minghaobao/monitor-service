@@ -135,9 +135,10 @@ export class ContractSyncService {
       'bsc': 56,
       'bsc-testnet': 97,
       'bsc testnet': 97,  // 支持带空格的格式
+      'BSC Testnet': 97,  // 支持大写格式
     };
 
-    return networkMap[network.toLowerCase()] || 1;
+    return networkMap[network] || networkMap[network.toLowerCase()] || 1;
   }
 
   // 清理资源

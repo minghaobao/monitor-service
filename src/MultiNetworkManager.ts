@@ -6,7 +6,23 @@ import pino from 'pino';
 
 const logger = pino({
   transport: {
-    target: 'pino-pretty',
+    targets: [
+      {
+        target: 'pino-pretty',
+        options: {
+          colorize: true,
+          translateTime: 'HH:MM:ss',
+        },
+        level: 'info'
+      },
+      {
+        target: 'pino/file',
+        options: {
+          destination: `./logs/monitor-manager.log`
+        },
+        level: 'info'
+      }
+    ]
   },
 });
 
@@ -33,12 +49,22 @@ export class MultiNetworkManager {
   async startNetwork(networkName: string): Promise<void> {
     try {
       if (this.services.has(networkName)) {
+        const message = `⚠️  网络 ${networkName} 已在运行中`;
         logger.warn({ networkName }, 'Network service already running');
+        console.log(message);
+        logger.info(message);
         return;
       }
 
+      const startingMessage = `🔧 正在启动网络: ${networkName}`;
+      console.log(startingMessage);
+      logger.info(startingMessage);
+      
       // 获取基础配置
       const baseConfig = this.multiNetworkLoader.getNetworkConfig(networkName);
+      const configMessage = `📋 网络配置: ${baseConfig.name} (Chain ID: ${baseConfig.chainId})`;
+      console.log(configMessage);
+      logger.info(configMessage);
       
       let config = baseConfig;
       
@@ -98,10 +124,29 @@ export class MultiNetworkManager {
         this.startBlockOption
       );
 
+      const initMessage = `🔄 正在初始化服务...`;
+      console.log(initMessage);
+      logger.info(initMessage);
       await service.init();
+      
+      const startMessage = `🚀 正在启动监控服务...`;
+      console.log(startMessage);
+      logger.info(startMessage);
       await service.start();
 
       this.services.set(networkName, service);
+
+      const successMessages = [
+        `✅ 网络 ${networkName} 启动成功!`,
+        `📊 合约数量: ${config.contracts.length}`,
+        `🔗 RPC端点: ${config.rpcUrl}`,
+        `📅 启动时间: ${new Date().toLocaleString()}`
+      ];
+      
+      successMessages.forEach(msg => {
+        console.log(msg);
+        logger.info(msg);
+      });
 
       logger.info({
         networkName,

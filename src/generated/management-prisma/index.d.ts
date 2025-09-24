@@ -4482,13 +4482,11 @@ export namespace Prisma {
 
   export type ContractStatusAvgAggregateOutputType = {
     id: number | null
-    chainId: number | null
     lastBlock: number | null
   }
 
   export type ContractStatusSumAggregateOutputType = {
     id: number | null
-    chainId: bigint | null
     lastBlock: bigint | null
   }
 
@@ -4496,46 +4494,44 @@ export namespace Prisma {
     id: number | null
     contractName: string | null
     contractAddress: string | null
-    chainId: bigint | null
+    network: string | null
     isPaused: boolean | null
     lastBlock: bigint | null
+    lastUpdated: Date | null
     createdAt: Date | null
-    updatedAt: Date | null
   }
 
   export type ContractStatusMaxAggregateOutputType = {
     id: number | null
     contractName: string | null
     contractAddress: string | null
-    chainId: bigint | null
+    network: string | null
     isPaused: boolean | null
     lastBlock: bigint | null
+    lastUpdated: Date | null
     createdAt: Date | null
-    updatedAt: Date | null
   }
 
   export type ContractStatusCountAggregateOutputType = {
     id: number
     contractName: number
     contractAddress: number
-    chainId: number
+    network: number
     isPaused: number
     lastBlock: number
+    lastUpdated: number
     createdAt: number
-    updatedAt: number
     _all: number
   }
 
 
   export type ContractStatusAvgAggregateInputType = {
     id?: true
-    chainId?: true
     lastBlock?: true
   }
 
   export type ContractStatusSumAggregateInputType = {
     id?: true
-    chainId?: true
     lastBlock?: true
   }
 
@@ -4543,33 +4539,33 @@ export namespace Prisma {
     id?: true
     contractName?: true
     contractAddress?: true
-    chainId?: true
+    network?: true
     isPaused?: true
     lastBlock?: true
+    lastUpdated?: true
     createdAt?: true
-    updatedAt?: true
   }
 
   export type ContractStatusMaxAggregateInputType = {
     id?: true
     contractName?: true
     contractAddress?: true
-    chainId?: true
+    network?: true
     isPaused?: true
     lastBlock?: true
+    lastUpdated?: true
     createdAt?: true
-    updatedAt?: true
   }
 
   export type ContractStatusCountAggregateInputType = {
     id?: true
     contractName?: true
     contractAddress?: true
-    chainId?: true
+    network?: true
     isPaused?: true
     lastBlock?: true
+    lastUpdated?: true
     createdAt?: true
-    updatedAt?: true
     _all?: true
   }
 
@@ -4663,11 +4659,11 @@ export namespace Prisma {
     id: number
     contractName: string
     contractAddress: string
-    chainId: bigint
+    network: string
     isPaused: boolean
-    lastBlock: bigint
-    createdAt: Date
-    updatedAt: Date
+    lastBlock: bigint | null
+    lastUpdated: Date
+    createdAt: Date | null
     _count: ContractStatusCountAggregateOutputType | null
     _avg: ContractStatusAvgAggregateOutputType | null
     _sum: ContractStatusSumAggregateOutputType | null
@@ -4693,11 +4689,11 @@ export namespace Prisma {
     id?: boolean
     contractName?: boolean
     contractAddress?: boolean
-    chainId?: boolean
+    network?: boolean
     isPaused?: boolean
     lastBlock?: boolean
+    lastUpdated?: boolean
     createdAt?: boolean
-    updatedAt?: boolean
   }, ExtArgs["result"]["contractStatus"]>
 
 
@@ -4706,14 +4702,14 @@ export namespace Prisma {
     id?: boolean
     contractName?: boolean
     contractAddress?: boolean
-    chainId?: boolean
+    network?: boolean
     isPaused?: boolean
     lastBlock?: boolean
+    lastUpdated?: boolean
     createdAt?: boolean
-    updatedAt?: boolean
   }
 
-  export type ContractStatusOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "contractName" | "contractAddress" | "chainId" | "isPaused" | "lastBlock" | "createdAt" | "updatedAt", ExtArgs["result"]["contractStatus"]>
+  export type ContractStatusOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "contractName" | "contractAddress" | "network" | "isPaused" | "lastBlock" | "lastUpdated" | "createdAt", ExtArgs["result"]["contractStatus"]>
 
   export type $ContractStatusPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ContractStatus"
@@ -4722,11 +4718,11 @@ export namespace Prisma {
       id: number
       contractName: string
       contractAddress: string
-      chainId: bigint
+      network: string
       isPaused: boolean
-      lastBlock: bigint
-      createdAt: Date
-      updatedAt: Date
+      lastBlock: bigint | null
+      lastUpdated: Date
+      createdAt: Date | null
     }, ExtArgs["result"]["contractStatus"]>
     composites: {}
   }
@@ -5099,11 +5095,11 @@ export namespace Prisma {
     readonly id: FieldRef<"ContractStatus", 'Int'>
     readonly contractName: FieldRef<"ContractStatus", 'String'>
     readonly contractAddress: FieldRef<"ContractStatus", 'String'>
-    readonly chainId: FieldRef<"ContractStatus", 'BigInt'>
+    readonly network: FieldRef<"ContractStatus", 'String'>
     readonly isPaused: FieldRef<"ContractStatus", 'Boolean'>
     readonly lastBlock: FieldRef<"ContractStatus", 'BigInt'>
+    readonly lastUpdated: FieldRef<"ContractStatus", 'DateTime'>
     readonly createdAt: FieldRef<"ContractStatus", 'DateTime'>
-    readonly updatedAt: FieldRef<"ContractStatus", 'DateTime'>
   }
     
 
@@ -8224,11 +8220,11 @@ export namespace Prisma {
     id: 'id',
     contractName: 'contractName',
     contractAddress: 'contractAddress',
-    chainId: 'chainId',
+    network: 'network',
     isPaused: 'isPaused',
     lastBlock: 'lastBlock',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    lastUpdated: 'lastUpdated',
+    createdAt: 'createdAt'
   };
 
   export type ContractStatusScalarFieldEnum = (typeof ContractStatusScalarFieldEnum)[keyof typeof ContractStatusScalarFieldEnum]
@@ -8334,7 +8330,8 @@ export namespace Prisma {
 
   export const ContractStatusOrderByRelevanceFieldEnum: {
     contractName: 'contractName',
-    contractAddress: 'contractAddress'
+    contractAddress: 'contractAddress',
+    network: 'network'
   };
 
   export type ContractStatusOrderByRelevanceFieldEnum = (typeof ContractStatusOrderByRelevanceFieldEnum)[keyof typeof ContractStatusOrderByRelevanceFieldEnum]
@@ -8659,49 +8656,49 @@ export namespace Prisma {
     id?: IntFilter<"ContractStatus"> | number
     contractName?: StringFilter<"ContractStatus"> | string
     contractAddress?: StringFilter<"ContractStatus"> | string
-    chainId?: BigIntFilter<"ContractStatus"> | bigint | number
+    network?: StringFilter<"ContractStatus"> | string
     isPaused?: BoolFilter<"ContractStatus"> | boolean
-    lastBlock?: BigIntFilter<"ContractStatus"> | bigint | number
-    createdAt?: DateTimeFilter<"ContractStatus"> | Date | string
-    updatedAt?: DateTimeFilter<"ContractStatus"> | Date | string
+    lastBlock?: BigIntNullableFilter<"ContractStatus"> | bigint | number | null
+    lastUpdated?: DateTimeFilter<"ContractStatus"> | Date | string
+    createdAt?: DateTimeNullableFilter<"ContractStatus"> | Date | string | null
   }
 
   export type ContractStatusOrderByWithRelationInput = {
     id?: SortOrder
     contractName?: SortOrder
     contractAddress?: SortOrder
-    chainId?: SortOrder
+    network?: SortOrder
     isPaused?: SortOrder
-    lastBlock?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    lastBlock?: SortOrderInput | SortOrder
+    lastUpdated?: SortOrder
+    createdAt?: SortOrderInput | SortOrder
     _relevance?: ContractStatusOrderByRelevanceInput
   }
 
   export type ContractStatusWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    contractAddress_chainId?: ContractStatusContractAddressChainIdCompoundUniqueInput
+    contractAddress_network?: ContractStatusContractAddressNetworkCompoundUniqueInput
     AND?: ContractStatusWhereInput | ContractStatusWhereInput[]
     OR?: ContractStatusWhereInput[]
     NOT?: ContractStatusWhereInput | ContractStatusWhereInput[]
     contractName?: StringFilter<"ContractStatus"> | string
     contractAddress?: StringFilter<"ContractStatus"> | string
-    chainId?: BigIntFilter<"ContractStatus"> | bigint | number
+    network?: StringFilter<"ContractStatus"> | string
     isPaused?: BoolFilter<"ContractStatus"> | boolean
-    lastBlock?: BigIntFilter<"ContractStatus"> | bigint | number
-    createdAt?: DateTimeFilter<"ContractStatus"> | Date | string
-    updatedAt?: DateTimeFilter<"ContractStatus"> | Date | string
-  }, "id" | "contractAddress_chainId">
+    lastBlock?: BigIntNullableFilter<"ContractStatus"> | bigint | number | null
+    lastUpdated?: DateTimeFilter<"ContractStatus"> | Date | string
+    createdAt?: DateTimeNullableFilter<"ContractStatus"> | Date | string | null
+  }, "id" | "contractAddress_network">
 
   export type ContractStatusOrderByWithAggregationInput = {
     id?: SortOrder
     contractName?: SortOrder
     contractAddress?: SortOrder
-    chainId?: SortOrder
+    network?: SortOrder
     isPaused?: SortOrder
-    lastBlock?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    lastBlock?: SortOrderInput | SortOrder
+    lastUpdated?: SortOrder
+    createdAt?: SortOrderInput | SortOrder
     _count?: ContractStatusCountOrderByAggregateInput
     _avg?: ContractStatusAvgOrderByAggregateInput
     _max?: ContractStatusMaxOrderByAggregateInput
@@ -8716,11 +8713,11 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"ContractStatus"> | number
     contractName?: StringWithAggregatesFilter<"ContractStatus"> | string
     contractAddress?: StringWithAggregatesFilter<"ContractStatus"> | string
-    chainId?: BigIntWithAggregatesFilter<"ContractStatus"> | bigint | number
+    network?: StringWithAggregatesFilter<"ContractStatus"> | string
     isPaused?: BoolWithAggregatesFilter<"ContractStatus"> | boolean
-    lastBlock?: BigIntWithAggregatesFilter<"ContractStatus"> | bigint | number
-    createdAt?: DateTimeWithAggregatesFilter<"ContractStatus"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"ContractStatus"> | Date | string
+    lastBlock?: BigIntNullableWithAggregatesFilter<"ContractStatus"> | bigint | number | null
+    lastUpdated?: DateTimeWithAggregatesFilter<"ContractStatus"> | Date | string
+    createdAt?: DateTimeNullableWithAggregatesFilter<"ContractStatus"> | Date | string | null
   }
 
   export type SystemEventWhereInput = {
@@ -9112,75 +9109,75 @@ export namespace Prisma {
   export type ContractStatusCreateInput = {
     contractName: string
     contractAddress: string
-    chainId?: bigint | number
+    network: string
     isPaused?: boolean
-    lastBlock: bigint | number
-    createdAt?: Date | string
-    updatedAt?: Date | string
+    lastBlock?: bigint | number | null
+    lastUpdated?: Date | string
+    createdAt?: Date | string | null
   }
 
   export type ContractStatusUncheckedCreateInput = {
     id?: number
     contractName: string
     contractAddress: string
-    chainId?: bigint | number
+    network: string
     isPaused?: boolean
-    lastBlock: bigint | number
-    createdAt?: Date | string
-    updatedAt?: Date | string
+    lastBlock?: bigint | number | null
+    lastUpdated?: Date | string
+    createdAt?: Date | string | null
   }
 
   export type ContractStatusUpdateInput = {
     contractName?: StringFieldUpdateOperationsInput | string
     contractAddress?: StringFieldUpdateOperationsInput | string
-    chainId?: BigIntFieldUpdateOperationsInput | bigint | number
+    network?: StringFieldUpdateOperationsInput | string
     isPaused?: BoolFieldUpdateOperationsInput | boolean
-    lastBlock?: BigIntFieldUpdateOperationsInput | bigint | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastBlock?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    lastUpdated?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ContractStatusUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     contractName?: StringFieldUpdateOperationsInput | string
     contractAddress?: StringFieldUpdateOperationsInput | string
-    chainId?: BigIntFieldUpdateOperationsInput | bigint | number
+    network?: StringFieldUpdateOperationsInput | string
     isPaused?: BoolFieldUpdateOperationsInput | boolean
-    lastBlock?: BigIntFieldUpdateOperationsInput | bigint | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastBlock?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    lastUpdated?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ContractStatusCreateManyInput = {
     id?: number
     contractName: string
     contractAddress: string
-    chainId?: bigint | number
+    network: string
     isPaused?: boolean
-    lastBlock: bigint | number
-    createdAt?: Date | string
-    updatedAt?: Date | string
+    lastBlock?: bigint | number | null
+    lastUpdated?: Date | string
+    createdAt?: Date | string | null
   }
 
   export type ContractStatusUpdateManyMutationInput = {
     contractName?: StringFieldUpdateOperationsInput | string
     contractAddress?: StringFieldUpdateOperationsInput | string
-    chainId?: BigIntFieldUpdateOperationsInput | bigint | number
+    network?: StringFieldUpdateOperationsInput | string
     isPaused?: BoolFieldUpdateOperationsInput | boolean
-    lastBlock?: BigIntFieldUpdateOperationsInput | bigint | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastBlock?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    lastUpdated?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ContractStatusUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     contractName?: StringFieldUpdateOperationsInput | string
     contractAddress?: StringFieldUpdateOperationsInput | string
-    chainId?: BigIntFieldUpdateOperationsInput | bigint | number
+    network?: StringFieldUpdateOperationsInput | string
     isPaused?: BoolFieldUpdateOperationsInput | boolean
-    lastBlock?: BigIntFieldUpdateOperationsInput | bigint | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastBlock?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    lastUpdated?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type SystemEventCreateInput = {
@@ -9817,17 +9814,6 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type BigIntFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[]
-    notIn?: bigint[] | number[]
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntFilter<$PrismaModel> | bigint | number
-  }
-
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -9839,25 +9825,24 @@ export namespace Prisma {
     search: string
   }
 
-  export type ContractStatusContractAddressChainIdCompoundUniqueInput = {
+  export type ContractStatusContractAddressNetworkCompoundUniqueInput = {
     contractAddress: string
-    chainId: bigint | number
+    network: string
   }
 
   export type ContractStatusCountOrderByAggregateInput = {
     id?: SortOrder
     contractName?: SortOrder
     contractAddress?: SortOrder
-    chainId?: SortOrder
+    network?: SortOrder
     isPaused?: SortOrder
     lastBlock?: SortOrder
+    lastUpdated?: SortOrder
     createdAt?: SortOrder
-    updatedAt?: SortOrder
   }
 
   export type ContractStatusAvgOrderByAggregateInput = {
     id?: SortOrder
-    chainId?: SortOrder
     lastBlock?: SortOrder
   }
 
@@ -9865,44 +9850,27 @@ export namespace Prisma {
     id?: SortOrder
     contractName?: SortOrder
     contractAddress?: SortOrder
-    chainId?: SortOrder
+    network?: SortOrder
     isPaused?: SortOrder
     lastBlock?: SortOrder
+    lastUpdated?: SortOrder
     createdAt?: SortOrder
-    updatedAt?: SortOrder
   }
 
   export type ContractStatusMinOrderByAggregateInput = {
     id?: SortOrder
     contractName?: SortOrder
     contractAddress?: SortOrder
-    chainId?: SortOrder
+    network?: SortOrder
     isPaused?: SortOrder
     lastBlock?: SortOrder
+    lastUpdated?: SortOrder
     createdAt?: SortOrder
-    updatedAt?: SortOrder
   }
 
   export type ContractStatusSumOrderByAggregateInput = {
     id?: SortOrder
-    chainId?: SortOrder
     lastBlock?: SortOrder
-  }
-
-  export type BigIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[]
-    notIn?: bigint[] | number[]
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntWithAggregatesFilter<$PrismaModel> | bigint | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedBigIntFilter<$PrismaModel>
-    _min?: NestedBigIntFilter<$PrismaModel>
-    _max?: NestedBigIntFilter<$PrismaModel>
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -10189,14 +10157,6 @@ export namespace Prisma {
     update?: MeshClaimUpdateWithWhereUniqueWithoutMeshInput | MeshClaimUpdateWithWhereUniqueWithoutMeshInput[]
     updateMany?: MeshClaimUpdateManyWithWhereWithoutMeshInput | MeshClaimUpdateManyWithWhereWithoutMeshInput[]
     deleteMany?: MeshClaimScalarWhereInput | MeshClaimScalarWhereInput[]
-  }
-
-  export type BigIntFieldUpdateOperationsInput = {
-    set?: bigint | number
-    increment?: bigint | number
-    decrement?: bigint | number
-    multiply?: bigint | number
-    divide?: bigint | number
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -10499,36 +10459,9 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type NestedBigIntFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[]
-    notIn?: bigint[] | number[]
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntFilter<$PrismaModel> | bigint | number
-  }
-
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedBigIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[]
-    notIn?: bigint[] | number[]
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntWithAggregatesFilter<$PrismaModel> | bigint | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedBigIntFilter<$PrismaModel>
-    _min?: NestedBigIntFilter<$PrismaModel>
-    _max?: NestedBigIntFilter<$PrismaModel>
   }
 
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {

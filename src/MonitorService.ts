@@ -9,7 +9,23 @@ import pino from 'pino';
 
 const logger = pino({
   transport: {
-    target: 'pino-pretty',
+    targets: [
+      {
+        target: 'pino-pretty',
+        options: {
+          colorize: true,
+          translateTime: 'HH:MM:ss',
+        },
+        level: 'info'
+      },
+      {
+        target: 'pino/file',
+        options: {
+          destination: `./logs/monitor-service.log`
+        },
+        level: 'info'
+      }
+    ]
   },
 });
 
@@ -184,15 +200,44 @@ export class MonitorService {
 
   // 启动服务
   async start() {
+    const startupMessages = [
+      `🔍 开始监控 ${this.currentConfig.name} (Chain ID: ${this.currentConfig.chainId})`,
+      `📡 RPC端点: ${this.currentConfig.rpcUrl}`,
+      `📋 监控合约: ${this.currentConfig.contracts.length} 个`
+    ];
+    
+    startupMessages.forEach(msg => {
+      console.log(msg);
+      logger.info(msg);
+    });
+    
     logger.info(
       { chainId: this.currentConfig.chainId, chainName: this.currentConfig.name },
       'Starting monitor service'
     );
 
     try {
+      const scannerMessage = `🔄 启动区块扫描器...`;
+      console.log(scannerMessage);
+      logger.info(scannerMessage);
+      
       // 启动区块扫描
       await this.blockScanner.startScanning();
+      
+      const successMessages = [
+        `✅ 区块扫描器启动成功!`,
+        `📊 监控状态: 活跃`,
+        `🔄 扫描进度将每分钟更新一次`
+      ];
+      
+      successMessages.forEach(msg => {
+        console.log(msg);
+        logger.info(msg);
+      });
     } catch (error) {
+      const errorMessage = `❌ 监控服务启动失败: ${error.message}`;
+      console.log(errorMessage);
+      logger.error(errorMessage);
       logger.error(
         { chainId: this.currentConfig.chainId, error },
         'Monitor service encountered an error'

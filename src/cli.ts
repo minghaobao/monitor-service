@@ -14,7 +14,23 @@ config();
 
 const logger = pino({
   transport: {
-    target: 'pino-pretty',
+    targets: [
+      {
+        target: 'pino-pretty',
+        options: {
+          colorize: true,
+          translateTime: 'HH:MM:ss',
+        },
+        level: 'info'
+      },
+      {
+        target: 'pino/file',
+        options: {
+          destination: `./logs/monitor-${process.env.NETWORK || 'default'}.log`
+        },
+        level: 'info'
+      }
+    ]
   },
 });
 
@@ -153,8 +169,30 @@ program
       }
 
       // 启动网络服务
+      const startupMessages = [
+        `🚀 启动扫描程序: ${networksToStart.join(', ')}`,
+        `📅 启动时间: ${new Date().toLocaleString()}`,
+        `🔧 配置模式: ${options.configMode || 'local'}`
+      ];
+      
+      startupMessages.forEach(msg => {
+        console.log(msg);
+        logger.info(msg);
+      });
+      
       await multiNetworkManager.startNetworks(networksToStart);
 
+      const successMessages = [
+        `✅ 扫描程序启动成功: ${networksToStart.join(', ')}`,
+        `📊 监控状态: 运行中`,
+        `🔄 自动扫描: 已启用`
+      ];
+      
+      successMessages.forEach(msg => {
+        console.log(msg);
+        logger.info(msg);
+      });
+      
       logger.info({ networks: networksToStart }, 'Monitor services started successfully');
 
       // 优雅退出处理

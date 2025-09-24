@@ -74,18 +74,33 @@
       "contracts": [
         {
           "name": "Meshes",
-          "address": "0x0000000000000000000000000000000000000000",
+          "address": "0x58d740f45Ec1043071A0fFF004176377188180C6",
           "abiPath": "./abis/Meshes.json"
         },
         {
           "name": "Reward",
-          "address": "0x0000000000000000000000000000000000000000",
+          "address": "0xAD0647a225841a56e24e1Ade19cF7bD9a698099F",
           "abiPath": "./abis/Reward.json"
         },
         {
           "name": "FoundationManage",
-          "address": "0x0000000000000000000000000000000000000000",
+          "address": "0x30376725f0194C852A61801BAF23ea6da6B0a732",
           "abiPath": "./abis/FoundationManage.json"
+        },
+        {
+          "name": "Stake",
+          "address": "0x7963753702eDcdd35be2d324bD88A291E515C3E2",
+          "abiPath": "./abis/Stake.json"
+        },
+        {
+          "name": "SafeManager",
+          "address": "0xFf61d9bf7Ac715BD7729Fda5D39d35108864c53B",
+          "abiPath": "./abis/SafeManager.json"
+        },
+        {
+          "name": "AutomatedExecutor",
+          "address": "0xB539CC9762FA5b5E18900466cDB8c8D4F434e712",
+          "abiPath": "./abis/AutomatedExecutor.json"
         }
       ]
     },
