@@ -8,13 +8,25 @@ import pino from 'pino';
 
 const logger = pino({
   transport: {
-    target: 'pino-pretty',
-    options: {
-      colorize: true,
-      translateTime: 'HH:MM:ss',
-      ignore: 'pid,hostname',
-      singleLine: true,
-    },
+    targets: [
+      {
+        target: 'pino-pretty',
+        options: {
+          colorize: true,
+          translateTime: 'HH:MM:ss',
+          ignore: 'pid,hostname',
+          singleLine: true,
+        },
+        level: 'info'
+      },
+      {
+        target: 'pino/file',
+        options: {
+          destination: `./logs/block-scanner.log`
+        },
+        level: 'info'
+      }
+    ]
   },
   level: 'info',
 });
@@ -193,7 +205,7 @@ export class BlockScanner {
                 chainId: this.config.chainId,
                 batchStart: i,
                 batchEnd: batchEnd - 1,
-                error: error.message,
+                error: error instanceof Error ? error.message : String(error),
               },
               'QuickNode batch processing failed, falling back to individual blocks'
             );
@@ -270,11 +282,19 @@ export class BlockScanner {
                 parentHash: block.parentHash,
                 timestamp: new Date(Number(block.timestamp) * 1000),
                 finalized: false,
+                gasUsed: block.gasUsed || 0n,
+                gasLimit: block.gasLimit || 0n,
+                size: Number(block.size) || 0,
+                txCount: block.transactions?.length || 0,
               },
               update: {
                 blockHash: block.hash,
                 parentHash: block.parentHash,
                 timestamp: new Date(Number(block.timestamp) * 1000),
+                gasUsed: block.gasUsed || 0n,
+                gasLimit: block.gasLimit || 0n,
+                size: Number(block.size) || 0,
+                txCount: block.transactions?.length || 0,
               },
             })
           )
@@ -387,7 +407,7 @@ export class BlockScanner {
   private startStatusTimer() {
     this.statusTimer = setInterval(() => {
       this.logStatus();
-    }, 30000); // 30秒
+    }, 60000); // 60秒 (1分钟)
   }
 
   // 停止状态报告定时器
@@ -408,6 +428,21 @@ export class BlockScanner {
     const uptime = Math.floor((currentTime - this.startTime) / 1000);
     const rpcStatus = this.rpcManager.getStatus();
     
+    // 格式化运行时间
+    const hours = Math.floor(uptime / 3600);
+    const minutes = Math.floor((uptime % 3600) / 60);
+    const seconds = uptime % 60;
+    const uptimeStr = hours > 0 ? `${hours}h ${minutes}m ${seconds}s` : 
+                      minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
+    
+    // 创建友好的状态消息
+    const statusMessage = `📊 扫描进度 | 当前区块: ${this.lastProcessedBlock.toString()} | ` +
+                         `已处理: ${this.totalBlocksProcessed} 区块, ${this.totalEventsProcessed} 事件 | ` +
+                         `运行时间: ${uptimeStr} | RPC: ${rpcStatus.isUsingQuickNode ? 'QuickNode' : 'Free'}`;
+    
+    // 输出到控制台和日志
+    console.log(statusMessage);
+    
     logger.info({
       network: this.config.name,
       chainId: this.config.chainId,
@@ -422,7 +457,7 @@ export class BlockScanner {
         quicknodeCount: rpcStatus.quicknodeCount,
         failedUrls: rpcStatus.failedUrls.length
       }
-    }, '📊 Scanning Status Report');
+    }, statusMessage);
   }
 
   // 启动扫描

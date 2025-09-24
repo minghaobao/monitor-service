@@ -156,11 +156,11 @@ exports.Prisma.ContractStatusScalarFieldEnum = {
   id: 'id',
   contractName: 'contractName',
   contractAddress: 'contractAddress',
-  chainId: 'chainId',
+  network: 'network',
   isPaused: 'isPaused',
   lastBlock: 'lastBlock',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  lastUpdated: 'lastUpdated',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SystemEventScalarFieldEnum = {
@@ -230,7 +230,8 @@ exports.Prisma.MeshOrderByRelevanceFieldEnum = {
 
 exports.Prisma.ContractStatusOrderByRelevanceFieldEnum = {
   contractName: 'contractName',
-  contractAddress: 'contractAddress'
+  contractAddress: 'contractAddress',
+  network: 'network'
 };
 
 exports.Prisma.SystemEventOrderByRelevanceFieldEnum = {

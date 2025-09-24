@@ -1,6 +1,7 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  provider      = "prisma-client-js"
+  output        = "../src/generated/prisma"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -36,6 +37,10 @@ model Block {
   parentHash      String   @map("parent_hash") @db.VarChar(66)
   timestamp       DateTime
   finalized       Boolean  @default(false)
+  gasUsed         BigInt?  @map("gas_used")
+  gasLimit        BigInt?  @map("gas_limit")
+  size            Int?
+  txCount         Int?     @map("tx_count")
   createdAt       DateTime @default(now()) @map("created_at")
 
   @@unique([chainId, blockNumber])

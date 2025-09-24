@@ -1,6 +1,7 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/management-prisma"
+  provider      = "prisma-client-js"
+  output        = "../src/generated/management-prisma"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -57,16 +58,16 @@ model Mesh {
 // 其他表暂时注释掉，只保留我们需要的
 
 model ContractStatus {
-  id              Int      @id @default(autoincrement())
-  contractName    String   @map("contract_name") @db.VarChar(100)
-  contractAddress String   @map("contract_address") @db.VarChar(42)
-  chainId         BigInt   @default(97) @map("chain_id")
-  isPaused        Boolean  @default(false) @map("is_paused")
-  lastBlock       BigInt   @map("last_block")
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @default(now()) @updatedAt @map("updated_at")
+  id              Int       @id @default(autoincrement())
+  contractName    String    @map("contract_name") @db.VarChar(50)
+  contractAddress String    @map("contract_address") @db.VarChar(42)
+  network         String    @db.VarChar(20)
+  isPaused        Boolean   @default(false) @map("is_paused")
+  lastBlock       BigInt?   @map("last_block")
+  lastUpdated     DateTime  @default(now()) @map("last_updated")
+  createdAt       DateTime? @default(now()) @map("created_at")
 
-  @@unique([contractAddress, chainId])
+  @@unique([contractAddress, network])
   @@map("contract_status")
 }
 
