@@ -1,0 +1,197 @@
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../src/generated/multi-network-prisma"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("MONITOR_DATABASE_URL")
+}
+
+// 网络配置表
+model Network {
+  id              Int      @id @default(autoincrement())
+  name            String   @unique @db.VarChar(50)
+  chainId         BigInt   @unique @map("chain_id")
+  displayName     String   @map("display_name") @db.VarChar(100)
+  rpcUrls         Json     @map("rpc_urls") @db.Json
+  wsUrls          Json?    @map("ws_urls") @db.Json
+  startBlock      BigInt   @map("start_block")
+  confirmations   Int      @default(12)
+  scanBlockSpan   Int      @map("scan_block_span") @default(1000)
+  parallelRequests Int     @map("parallel_requests") @default(4)
+  isActive        Boolean  @map("is_active") @default(true)
+  lastBlock       BigInt?  @map("last_block")
+  lastUpdated     DateTime @map("last_updated") @default(now())
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  // 关联
+  contracts       Contract[]
+  blocks          Block[]
+  events          Event[]
+  functionCalls   FunctionCall[]
+  checkpoints     Checkpoint[]
+  anomalies       Anomaly[]
+
+  @@map("networks")
+}
+
+// 合约注册表（按网络分组）
+model Contract {
+  id              Int      @id @default(autoincrement())
+  networkId       Int      @map("network_id")
+  address         String   @db.VarChar(42)
+  name            String   @db.VarChar(50)
+  abiVersion      String   @map("abi_version") @db.VarChar(20)
+  isActive        Boolean  @map("is_active") @default(true)
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  
+  // 关联
+  network         Network @relation(fields: [networkId], references: [id])
+  events          Event[]
+  functionCalls   FunctionCall[]
+
+  @@unique([networkId, address])
+  @@index([networkId])
+  @@index([address])
+  @@map("contracts")
+}
+
+// 区块信息（按网络分组）
+model Block {
+  id              Int      @id @default(autoincrement())
+  networkId       Int      @map("network_id")
+  blockNumber     BigInt   @map("block_number")
+  blockHash       String   @map("block_hash") @db.VarChar(66)
+  parentHash      String   @map("parent_hash") @db.VarChar(66)
+  timestamp       DateTime
+  finalized       Boolean  @default(false)
+  gasUsed         BigInt?  @map("gas_used")
+  gasLimit        BigInt?  @map("gas_limit")
+  size            Int?
+  txCount         Int?     @map("tx_count")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  // 关联
+  network         Network @relation(fields: [networkId], references: [id])
+
+  @@unique([networkId, blockNumber])
+  @@unique([networkId, blockHash])
+  @@index([networkId])
+  @@index([blockNumber])
+  @@index([blockHash])
+  @@index([networkId, timestamp])
+  @@map("blocks")
+}
+
+// 链上事件（按网络分组）
+model Event {
+  id              Int      @id @default(autoincrement())
+  networkId       Int      @map("network_id")
+  blockNumber     BigInt   @map("block_number")
+  txHash          String   @map("tx_hash") @db.VarChar(66)
+  logIndex        Int      @map("log_index")
+  contractAddress String   @map("contract_address") @db.VarChar(42)
+  eventName       String   @map("event_name") @db.VarChar(100)
+  eventSignature  String   @map("event_signature") @db.VarChar(100)
+  args            Json?    @db.Json
+  removed         Boolean  @default(false)
+  timestamp       DateTime
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  // 关联
+  network         Network @relation(fields: [networkId], references: [id])
+  contract        Contract @relation(fields: [contractAddress, networkId], references: [address, networkId])
+
+  @@unique([networkId, txHash, logIndex])
+  @@index([networkId])
+  @@index([blockNumber])
+  @@index([txHash])
+  @@index([contractAddress])
+  @@index([networkId, timestamp])
+  @@map("events")
+}
+
+// 方法调用（按网络分组）
+model FunctionCall {
+  id              Int      @id @default(autoincrement())
+  networkId       Int      @map("network_id")
+  blockNumber     BigInt   @map("block_number")
+  txHash          String   @map("tx_hash") @db.VarChar(66)
+  contractAddress String   @map("contract_address") @db.VarChar(42)
+  methodName      String   @map("method_name") @db.VarChar(100)
+  methodSignature String   @map("method_signature") @db.VarChar(100)
+  args            Json?    @db.Json
+  from            String   @db.VarChar(42)
+  value           String   @db.VarChar(78) // wei string
+  status          Boolean  // true = success, false = failed
+  gasUsed         BigInt   @map("gas_used")
+  timestamp       DateTime
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  // 关联
+  network         Network @relation(fields: [networkId], references: [id])
+  contract        Contract @relation(fields: [contractAddress, networkId], references: [address, networkId])
+
+  @@unique([networkId, txHash])
+  @@index([networkId])
+  @@index([blockNumber])
+  @@index([txHash])
+  @@index([contractAddress])
+  @@index([networkId, timestamp])
+  @@map("function_calls")
+}
+
+// 处理进度（按网络分组）
+model Checkpoint {
+  id                  Int      @id @default(autoincrement())
+  networkId           Int      @map("network_id") @unique
+  lastProcessedBlock  BigInt   @map("last_processed_block")
+  updatedAt          DateTime @default(now()) @map("updated_at")
+
+  // 关联
+  network             Network @relation(fields: [networkId], references: [id])
+
+  @@map("checkpoints")
+}
+
+// 异常记录（按网络分组）
+model Anomaly {
+  id          Int      @id @default(autoincrement())
+  networkId   Int      @map("network_id")
+  type        String   @db.VarChar(50) // missing_block, duplicate_block, reorg
+  key         String   @db.VarChar(100) // block number or hash
+  details     Json?    @db.Json
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // 关联
+  network     Network @relation(fields: [networkId], references: [id])
+
+  @@index([networkId, type])
+  @@index([networkId, createdAt])
+  @@map("anomalies")
+}
+
+// 网络统计表
+model NetworkStats {
+  id              Int      @id @default(autoincrement())
+  networkId       Int      @map("network_id")
+  date            DateTime @db.Date
+  totalBlocks     BigInt   @map("total_blocks") @default(0)
+  totalEvents     BigInt   @map("total_events") @default(0)
+  totalTxs        BigInt   @map("total_txs") @default(0)
+  avgBlockTime    Float    @map("avg_block_time") @default(0)
+  peakTps         Float    @map("peak_tps") @default(0)
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  // 关联
+  network         Network @relation(fields: [networkId], references: [id])
+
+  @@unique([networkId, date])
+  @@index([networkId])
+  @@index([date])
+  @@map("network_stats")
+}

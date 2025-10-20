@@ -9,7 +9,16 @@
         "https://bsc-dataseed1.ninicoin.io",
         "https://bsc-dataseed2.defibit.io",
         "https://bsc-dataseed3.defibit.io",
-        "https://bsc-dataseed4.defibit.io"
+        "https://bsc-dataseed4.defibit.io",
+        "https://bsc-dataseed.binance.org:443",
+        "https://bsc-dataseed1.defibit.io:443",
+        "https://bsc-dataseed1.ninicoin.io:443",
+        "https://bsc-dataseed2.defibit.io:443",
+        "https://bsc-dataseed3.defibit.io:443",
+        "https://bsc-dataseed4.defibit.io:443",
+        "https://bsc.meowrpc.com",
+        "https://bsc.publicnode.com",
+        "https://bsc-rpc.publicnode.com"
       ],
       "rpcWs": "wss://bsc-ws-node.nariox.org:443/ws",
       "startBlock": 39000000,
@@ -64,7 +73,12 @@
         "https://data-seed-prebsc-2-s2.binance.org:8545",
         "https://data-seed-prebsc-1-s3.binance.org:8545",
         "https://data-seed-prebsc-2-s3.binance.org:8545",
-        "https://quaint-alien-night.bsc-testnet.quiknode.pro/15940b1b01410691c79a0d397b21332d8bc88174/"
+        "https://quaint-alien-night.bsc-testnet.quiknode.pro/15940b1b01410691c79a0d397b21332d8bc88174/",
+        "https://bsc-testnet.publicnode.com",
+        "https://bsc-testnet-rpc.publicnode.com",
+        "https://bsc-testnet.meowrpc.com",
+        "https://bsc-testnet.nodereal.io/v1/64a9df0874fb4e93a9b0c5d5",
+        "https://bsc-testnet.blockpi.network/v1/rpc/public"
       ],
       "rpcWs": "wss://bsc-testnet-ws-node.nariox.org:443/ws",
       "startBlock": 38000000,
@@ -74,7 +88,7 @@
       "contracts": [
         {
           "name": "Meshes",
-          "address": "0x58d740f45Ec1043071A0fFF004176377188180C6",
+          "address": "0x3cbDBd062A22D178Ab7743E967835d86e9356bFd",
           "abiPath": "./abis/Meshes.json"
         },
         {
@@ -84,7 +98,7 @@
         },
         {
           "name": "FoundationManage",
-          "address": "0x30376725f0194C852A61801BAF23ea6da6B0a732",
+          "address": "0xF2edFDf74599bd9e09d89AC14dDba93fBb9b7256",
           "abiPath": "./abis/FoundationManage.json"
         },
         {
@@ -107,7 +121,16 @@
     "polygon": {
       "name": "Polygon Mainnet",
       "chainId": 137,
-      "rpcHttp": "https://polygon-rpc.com",
+      "rpcHttp": [
+        "https://polygon-rpc.com",
+        "https://polygon.llamarpc.com",
+        "https://polygon.meowrpc.com",
+        "https://polygon.publicnode.com",
+        "https://polygon-rpc.publicnode.com",
+        "https://polygon.blockpi.network/v1/rpc/public",
+        "https://polygon-mainnet.public.blastapi.io",
+        "https://polygon-mainnet.g.alchemy.com/v2/demo"
+      ],
       "rpcWs": "wss://polygon-rpc.com/ws",
       "startBlock": 50000000,
       "confirmations": 12,
@@ -156,8 +179,17 @@
     "ethereum": {
       "name": "Ethereum Mainnet",
       "chainId": 1,
-      "rpcHttp": "https://eth.llamarpc.com",
-      "rpcWs": "wss://eth.llamarpc.com",
+      "rpcHttp": [
+        "https://eth.llamarpc.com",
+        "https://ethereum.publicnode.com",
+        "https://ethereum-rpc.publicnode.com",
+        "https://eth.meowrpc.com",
+        "https://ethereum.blockpi.network/v1/rpc/public",
+        "https://ethereum-mainnet.public.blastapi.io",
+        "https://ethereum.publicnode.com",
+        "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"
+      ],
+      "rpcWs": "wss://ethereum.publicnode.com",
       "startBlock": 19000000,
       "confirmations": 12,
       "scanBlockSpan": 1000,
