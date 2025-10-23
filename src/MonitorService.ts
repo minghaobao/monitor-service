@@ -54,7 +54,7 @@ export class MonitorService {
     });
     this.currentConfig = baseConfig;
     
-    // 如果提供了数据库URL，则使用动态配置
+    // 只有在提供了数据库URL且不是静态模式时才使用动态配置
     if (managementDatabaseUrl && monitorDatabaseUrl) {
       this.dynamicConfigLoader = new DynamicConfigLoader(
         managementDatabaseUrl,
