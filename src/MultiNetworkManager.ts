@@ -115,12 +115,16 @@ export class MultiNetworkManager {
           configMode: this.configMode,
           reason: this.configMode === 'local' ? 'Using local configuration' : 'No management database provided'
         }, 'Using static configuration');
+        
+        // 在静态模式下，直接使用基础配置，不尝试连接数据库
+        config = baseConfig;
       }
 
+      // 在静态模式下，不传递数据库URL给MonitorService
       const service = new MonitorService(
         config,
-        this.managementDatabaseUrl,
-        this.monitorDatabaseUrl,
+        shouldUseDynamicConfig ? this.managementDatabaseUrl : undefined,
+        shouldUseDynamicConfig ? this.monitorDatabaseUrl : this.monitorDatabaseUrl,
         this.startBlockOption
       );
 
