@@ -120,12 +120,13 @@ export class MultiNetworkManager {
         config = baseConfig;
       }
 
-      // 在静态模式下，不传递数据库URL给MonitorService
+      // 即使静态模式下也传递management数据库URL，以便处理事件
       const service = new MonitorService(
         config,
-        shouldUseDynamicConfig ? this.managementDatabaseUrl : undefined,
-        shouldUseDynamicConfig ? this.monitorDatabaseUrl : this.monitorDatabaseUrl,
-        this.startBlockOption
+        this.managementDatabaseUrl, // 总是传递management数据库URL
+        this.monitorDatabaseUrl,
+        this.startBlockOption,
+        shouldUseDynamicConfig // 只有在动态配置模式下才启用动态配置
       );
 
       const initMessage = `🔄 正在初始化服务...`;
