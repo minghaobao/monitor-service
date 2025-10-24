@@ -69,10 +69,28 @@ async function getMonitorStatus(network: string): Promise<{
         Math.max(...lastBlockMatches.map(match => parseInt(match.match(/"currentBlock":"(\d+)"/)[1]))) : 
         undefined;
       
-      const eventsMatches = logContent.match(/"totalEvents":(\d+)/g);
-      const totalEvents = eventsMatches ? 
-        Math.max(...eventsMatches.map(match => parseInt(match.match(/"totalEvents":(\d+)/)[1]))) : 
-        undefined;
+      // 从数据库获取真实的事件数量
+      let totalEvents = 0;
+      try {
+        const networkToChainId: { [key: string]: number } = {
+          'bsc-testnet': 97,
+          'bsc': 56,
+          'polygon': 137,
+          'ethereum': 1
+        };
+        const chainId = networkToChainId[network];
+        if (chainId) {
+          const result = await prisma.$queryRaw`SELECT COUNT(*) as count FROM events WHERE chain_id = ${chainId}`;
+          totalEvents = Number((result as any)[0]?.count || 0);
+        }
+      } catch (dbError) {
+        console.error('获取事件数量失败:', dbError);
+        // 如果数据库查询失败，尝试从日志获取
+        const eventsMatches = logContent.match(/"totalEvents":(\d+)/g);
+        totalEvents = eventsMatches ? 
+          Math.max(...eventsMatches.map(match => parseInt(match.match(/"totalEvents":(\d+)/)[1]))) : 
+          0;
+      }
 
       return {
         network,

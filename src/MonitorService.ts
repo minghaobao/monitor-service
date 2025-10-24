@@ -42,7 +42,8 @@ export class MonitorService {
     private readonly baseConfig: ChainConfig,
     private readonly managementDatabaseUrl?: string,
     private readonly monitorDatabaseUrl?: string,
-    private readonly startBlockOption?: string
+    private readonly startBlockOption?: string,
+    private readonly useDynamicConfig: boolean = false
   ) {
     // 使用Monitor数据库的Prisma客户端
     this.prisma = new PrismaClient({
@@ -54,8 +55,8 @@ export class MonitorService {
     });
     this.currentConfig = baseConfig;
     
-    // 只有在提供了数据库URL且不是静态模式时才使用动态配置
-    if (managementDatabaseUrl && monitorDatabaseUrl) {
+    // 只有在明确启用动态配置时才使用动态配置
+    if (useDynamicConfig && managementDatabaseUrl && monitorDatabaseUrl) {
       this.dynamicConfigLoader = new DynamicConfigLoader(
         managementDatabaseUrl,
         monitorDatabaseUrl,
