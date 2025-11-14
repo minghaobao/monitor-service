@@ -128,7 +128,7 @@ export class MeshProcessor {
   }
 
   /**
-   * 处理ClaimMesh函数调用
+   * 处理claimMesh函数调用
    */
   async processClaimMeshCall(callData: any): Promise<void> {
     try {

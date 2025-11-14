@@ -267,8 +267,8 @@ export class TxDecoder {
     }
 
     try {
-      // 处理ClaimMesh函数调用
-      if (callData.methodName === 'ClaimMesh') {
+      // 处理claimMesh函数调用
+      if (callData.methodName === 'claimMesh') {
         await this.claimDataProcessor.processClaimMeshCall({
           from: callData.from,
           args: callData.args,
@@ -284,7 +284,7 @@ export class TxDecoder {
           meshId: callData.args._meshID,
           txHash: callData.txHash,
           status: callData.status
-        }, 'Processed ClaimMesh call for claim data');
+        }, 'Processed claimMesh call for claim data');
       }
       // 处理claimMints函数调用
       else if (callData.methodName === 'claimMints') {

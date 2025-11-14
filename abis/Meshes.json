@@ -3,12 +3,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_foundationAddr",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_governanceSafe",
+        "name": "_governanceSafeAddress",
         "type": "address"
       }
     ],
@@ -89,31 +84,6 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "string",
-        "name": "meshID",
-        "type": "string"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "time",
-        "type": "uint256"
-      }
-    ],
-    "name": "ClaimMint",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
         "internalType": "string",
         "name": "meshID",
         "type": "string"
@@ -139,18 +109,24 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "address",
-        "name": "oldAddress",
-        "type": "address"
+        "internalType": "bool",
+        "name": "isSafeGovernance",
+        "type": "bool"
       },
       {
         "indexed": true,
         "internalType": "address",
-        "name": "newAddress",
+        "name": "caller",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
       }
     ],
-    "name": "FoundationAddressUpdated",
+    "name": "GovernanceModeLocked",
     "type": "event"
   },
   {
@@ -158,37 +134,24 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
+        "internalType": "bool",
+        "name": "isSafeGovernance",
+        "type": "bool"
       },
       {
         "indexed": true,
-        "internalType": "uint256",
-        "name": "time",
-        "type": "uint256"
-      }
-    ],
-    "name": "FoundationFeeAccrued",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "caller",
+        "type": "address"
       },
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "uint256",
-        "name": "time",
+        "name": "timestamp",
         "type": "uint256"
       }
     ],
-    "name": "FoundationPayout",
+    "name": "GovernanceModeSwitched",
     "type": "event"
   },
   {
@@ -263,6 +226,25 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": false,
         "internalType": "address",
         "name": "account",
@@ -322,6 +304,63 @@
       {
         "indexed": true,
         "internalType": "address",
+        "name": "oldAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newAddress",
+        "type": "address"
+      }
+    ],
+    "name": "TreasuryAddressUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "time",
+        "type": "uint256"
+      }
+    ],
+    "name": "TreasuryFeeAccrued",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "time",
+        "type": "uint256"
+      }
+    ],
+    "name": "TreasuryPayout",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "user",
         "type": "address"
       },
@@ -340,7 +379,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "foundation",
+        "name": "treasury",
         "type": "uint256"
       },
       {
@@ -453,7 +492,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "foundation",
+        "name": "treasury",
         "type": "uint256"
       },
       {
@@ -492,34 +531,8 @@
     "type": "event"
   },
   {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "_meshID",
-        "type": "string"
-      }
-    ],
-    "name": "ClaimMesh",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
-    "name": "FoundationAddr",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "activeMeshes",
+    "name": "activeClaimers",
     "outputs": [
       {
         "internalType": "uint256",
@@ -532,7 +545,7 @@
   },
   {
     "inputs": [],
-    "name": "activeMinters",
+    "name": "activeMeshes",
     "outputs": [
       {
         "internalType": "uint256",
@@ -627,6 +640,30 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "canUserWithdraw",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "canWithdraw",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "nextWithdrawTime",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "",
         "type": "address"
       }
@@ -643,16 +680,34 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "claimMints",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
+        "internalType": "string",
+        "name": "_meshID",
+        "type": "string"
       }
     ],
-    "stateMutability": "view",
+    "name": "claimMesh",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "_meshID",
+        "type": "string"
+      }
+    ],
+    "name": "claimMeshFor",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -727,12 +782,12 @@
   {
     "inputs": [
       {
-        "internalType": "string",
+        "internalType": "address",
         "name": "",
-        "type": "string"
+        "type": "address"
       }
     ],
-    "name": "degreeHeats",
+    "name": "firstClaimTimestamp",
     "outputs": [
       {
         "internalType": "uint256",
@@ -757,35 +812,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "_meshID",
-        "type": "string"
-      }
-    ],
-    "name": "getClaimTsAmount",
-    "outputs": [
-      {
-        "internalType": "int256",
-        "name": "count",
-        "type": "int256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "getContractStatus",
     "outputs": [
@@ -801,7 +827,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "_activeMinters",
+        "name": "_activeClaimers",
         "type": "uint256"
       },
       {
@@ -820,30 +846,7 @@
   },
   {
     "inputs": [],
-    "name": "getCurrentDayYear",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "dayIndex",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "yearIndex",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "factor1e10",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getEarthDashboard",
+    "name": "getDashboard",
     "outputs": [
       {
         "internalType": "uint256",
@@ -862,13 +865,36 @@
       },
       {
         "internalType": "uint256",
-        "name": "_treasury",
+        "name": "_pending",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "_foundation",
+        "name": "_treasury",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getGovernanceInfo",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "_isSafeGovernance",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "_governanceLocked",
+        "type": "bool"
+      },
+      {
+        "internalType": "address",
+        "name": "_currentGovernance",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -970,57 +996,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "getSpendNonce",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      }
-    ],
-    "name": "getUserClaimCount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      }
-    ],
-    "name": "getUserMeshes",
-    "outputs": [
-      {
-        "internalType": "string[]",
-        "name": "",
-        "type": "string[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -1056,12 +1031,44 @@
   },
   {
     "inputs": [],
-    "name": "governanceSafe",
+    "name": "governanceLocked",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "governanceSafeAddress",
     "outputs": [
       {
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "hasWithdrawn",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -1089,6 +1096,19 @@
       }
     ],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "isSafeGovernance",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -1195,12 +1215,31 @@
         "type": "string"
       }
     ],
-    "name": "meshApplyCount",
+    "name": "meshClaimCount",
     "outputs": [
       {
         "internalType": "uint32",
         "name": "",
         "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "name": "meshHeats",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -1214,6 +1253,19 @@
         "internalType": "string",
         "name": "",
         "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -1241,14 +1293,14 @@
   },
   {
     "inputs": [],
-    "name": "payoutFoundationIfDue",
+    "name": "payoutTreasuryIfDue",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "pendingFoundationPool",
+    "name": "pendingTreasuryPool",
     "outputs": [
       {
         "internalType": "uint256",
@@ -1291,7 +1343,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "foundationTodayIfNoWithdraw",
+        "name": "treasuryTodayIfNoWithdraw",
         "type": "uint256"
       },
       {
@@ -1328,6 +1380,13 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -1344,11 +1403,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_newFoundationAddr",
+        "name": "_newSafe",
         "type": "address"
       }
     ],
-    "name": "setFoundationAddress",
+    "name": "setGovernanceSafe",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1357,11 +1416,18 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_newSafe",
+        "name": "_newTreasuryAddr",
         "type": "address"
       }
     ],
-    "name": "setGovernanceSafe",
+    "name": "setTreasuryAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "switchToSafeGovernance",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1382,6 +1448,19 @@
   {
     "inputs": [],
     "name": "totalBurn",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "totalClaimMints",
     "outputs": [
       {
         "internalType": "uint256",
@@ -1456,6 +1535,32 @@
       }
     ],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "treasuryAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

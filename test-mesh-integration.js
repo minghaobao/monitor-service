@@ -37,7 +37,7 @@ async function testMeshIntegration() {
     await claimProcessor.processMeshClaimedEvent(mockEventData);
     console.log('   ✅ MeshClaimed事件处理成功\n');
 
-    // 模拟ClaimMesh函数调用数据
+    // 模拟claimMesh函数调用数据
     const mockCallData = {
       from: '0x1234567890123456789012345678901234567890',
       args: {
@@ -49,13 +49,13 @@ async function testMeshIntegration() {
       status: true,
     };
 
-    console.log('2. 测试ClaimMesh函数调用处理:');
+    console.log('2. 测试claimMesh函数调用处理:');
     console.log(`   调用者: ${mockCallData.from}`);
     console.log(`   Mesh ID: ${mockCallData.args._meshID}`);
     
     // 处理函数调用
     await claimProcessor.processClaimMeshCall(mockCallData);
-    console.log('   ✅ ClaimMesh函数调用处理成功\n');
+    console.log('   ✅ claimMesh函数调用处理成功\n');
 
     // 获取mesh统计信息
     console.log('3. 获取mesh统计信息:');
