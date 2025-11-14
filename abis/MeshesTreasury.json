@@ -3,17 +3,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_meshToken",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_foundationAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_governanceSafeAddress",
+        "name": "_safe",
         "type": "address"
       }
     ],
@@ -25,24 +15,18 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "uint256",
-        "name": "activityId",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "oldFoundationManage",
+        "type": "address"
       },
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "count",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "totalAmount",
-        "type": "uint256"
+        "indexed": true,
+        "internalType": "address",
+        "name": "newFoundationManage",
+        "type": "address"
       }
     ],
-    "name": "ActivityBatchRewarded",
+    "name": "FoundationManageUpdated",
     "type": "event"
   },
   {
@@ -50,24 +34,49 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "uint256",
-        "name": "activityId",
-        "type": "uint256"
+        "internalType": "bool",
+        "name": "isSafeGovernance",
+        "type": "bool"
       },
       {
         "indexed": true,
         "internalType": "address",
-        "name": "user",
+        "name": "caller",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount",
+        "name": "timestamp",
         "type": "uint256"
       }
     ],
-    "name": "ActivityRewarded",
+    "name": "GovernanceModeLocked",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bool",
+        "name": "isSafeGovernance",
+        "type": "bool"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "caller",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      }
+    ],
+    "name": "GovernanceModeSwitched",
     "type": "event"
   },
   {
@@ -76,17 +85,11 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "oldVerifier",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "newVerifier",
+        "name": "meshToken",
         "type": "address"
       }
     ],
-    "name": "CheckInVerifierUpdated",
+    "name": "MeshTokenUpdated",
     "type": "event"
   },
   {
@@ -95,17 +98,17 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "oldFoundation",
+        "name": "previousOwner",
         "type": "address"
       },
       {
         "indexed": true,
         "internalType": "address",
-        "name": "newFoundation",
+        "name": "newOwner",
         "type": "address"
       }
     ],
-    "name": "FoundationUpdated",
+    "name": "OwnershipTransferred",
     "type": "event"
   },
   {
@@ -127,23 +130,17 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "user",
+        "name": "recipient",
         "type": "address"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
+        "internalType": "bool",
+        "name": "approved",
+        "type": "bool"
       }
     ],
-    "name": "RewardSet",
+    "name": "RecipientApproved",
     "type": "event"
   },
   {
@@ -152,7 +149,32 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "user",
+        "name": "oldSafe",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newSafe",
+        "type": "address"
+      }
+    ],
+    "name": "SafeUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "initiator",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "to",
         "type": "address"
       },
       {
@@ -163,12 +185,12 @@
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
+        "internalType": "bytes32",
+        "name": "reasonId",
+        "type": "bytes32"
       }
     ],
-    "name": "RewardWithdrawn",
+    "name": "TransferExecuted",
     "type": "event"
   },
   {
@@ -185,106 +207,31 @@
     "type": "event"
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "minAmount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "maxAmount",
-        "type": "uint256"
-      }
-    ],
-    "name": "WithdrawLimitsUpdated",
-    "type": "event"
-  },
-  {
-    "inputs": [],
-    "name": "checkInVerifier",
-    "outputs": [
-      {
-        "internalType": "contract ICheckInVerifier",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "foundationAddress",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getContractStats",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "_totalRewardsDistributed",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_totalRewardsWithdrawn",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_pendingRewards",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_safe",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
-        "name": "_user",
+        "name": "",
         "type": "address"
       }
     ],
-    "name": "getRewardAmount",
+    "name": "approvedRecipients",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "balance",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "totalAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "withdrawnAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "availableAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "lastWithdrawTime",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -292,37 +239,28 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "getUsersWithRewards",
-    "outputs": [
-      {
-        "internalType": "address[]",
-        "name": "users",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "amounts",
-        "type": "uint256[]"
-      }
-    ],
-    "stateMutability": "pure",
+    "inputs": [],
+    "name": "balanceFoundationManage",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "governanceSafeAddress",
+    "name": "balanceRatio",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "foundationManage",
     "outputs": [
       {
         "internalType": "address",
@@ -335,12 +273,90 @@
   },
   {
     "inputs": [],
-    "name": "maxWithdrawAmount",
+    "name": "getBalanceInfo",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "treasuryBalance",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "foundationBalance",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "difference",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getGovernanceInfo",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "_isSafeGovernance",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "_governanceLocked",
+        "type": "bool"
+      },
+      {
+        "internalType": "address",
+        "name": "_currentGovernance",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "governanceLocked",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      }
+    ],
+    "name": "isRecipientApproved",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "isSafeGovernance",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -361,12 +377,12 @@
   },
   {
     "inputs": [],
-    "name": "minWithdrawAmount",
+    "name": "owner",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "address",
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -393,15 +409,125 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "activityId",
-        "type": "uint256"
-      },
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "safeAddress",
+    "outputs": [
       {
         "internalType": "address",
-        "name": "user",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_foundationManage",
+        "type": "address"
+      }
+    ],
+    "name": "setFoundationManage",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_meshToken",
+        "type": "address"
+      }
+    ],
+    "name": "setMeshToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "approved",
+        "type": "bool"
+      }
+    ],
+    "name": "setRecipient",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "recipients",
+        "type": "address[]"
+      },
+      {
+        "internalType": "bool",
+        "name": "approved",
+        "type": "bool"
+      }
+    ],
+    "name": "setRecipients",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_newSafe",
+        "type": "address"
+      }
+    ],
+    "name": "setSafe",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "switchToSafeGovernance",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "to",
         "type": "address"
       },
       {
@@ -410,30 +536,7 @@
         "type": "uint256"
       }
     ],
-    "name": "rewardActivityWinner",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "activityId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address[]",
-        "name": "users",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "amounts",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "rewardActivityWinnersBatch",
+    "name": "transferTo",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -442,160 +545,28 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_verifier",
+        "name": "to",
         "type": "address"
-      }
-    ],
-    "name": "setCheckInVerifier",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_safe",
-        "type": "address"
-      }
-    ],
-    "name": "setGovernanceSafe",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address[]",
-        "name": "_users",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "_amounts",
-        "type": "uint256[]"
       },
       {
         "internalType": "uint256",
-        "name": "_totalAmount",
-        "type": "uint256"
-      }
-    ],
-    "name": "setUserReward",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_minAmount",
+        "name": "amount",
         "type": "uint256"
       },
       {
-        "internalType": "uint256",
-        "name": "_maxAmount",
-        "type": "uint256"
+        "internalType": "bytes32",
+        "name": "reasonId",
+        "type": "bytes32"
       }
     ],
-    "name": "setWithdrawLimits",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "totalRewardsDistributed",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "totalRewardsWithdrawn",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "unpause",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_newFoundation",
-        "type": "address"
-      }
-    ],
-    "name": "updateFoundation",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "userRewards",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "totalAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "withdrawnAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "lastWithdrawTime",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "withdraw",
+    "name": "transferToWithReason",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "withdrawAll",
+    "name": "unpause",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

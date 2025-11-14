@@ -140,7 +140,7 @@ export class ClaimDataProcessor {
     }
   }
 
-  // 处理ClaimMesh函数调用
+  // 处理claimMesh函数调用
   async processClaimMeshCall(callData: any): Promise<void> {
     try {
       const {
@@ -157,7 +157,7 @@ export class ClaimDataProcessor {
         logger.debug({
           txHash,
           from
-        }, 'Skipping failed ClaimMesh transaction');
+        }, 'Skipping failed claimMesh transaction');
         return;
       }
 
@@ -168,12 +168,12 @@ export class ClaimDataProcessor {
         meshId,
         blockNumber: blockNumber.toString(),
         txHash
-      }, 'Processing ClaimMesh function call');
+      }, 'Processing claimMesh function call');
 
       // 获取或创建用户
       const user = await this.getOrCreateUser(from);
 
-      // 由于ClaimMesh函数调用没有包含完整的claim数据（如经纬度、heat等），
+      // 由于claimMesh函数调用没有包含完整的claim数据（如经纬度、heat等），
       // 我们需要等待MeshClaimed事件来获取完整数据
       // 这里只记录函数调用，不创建mesh和mesh_claims记录
       logger.info({
@@ -181,13 +181,13 @@ export class ClaimDataProcessor {
         from,
         meshId,
         txHash
-      }, 'ClaimMesh call processed successfully');
+      }, 'claimMesh call processed successfully');
 
     } catch (error) {
       logger.error({
         error: (error as Error).message,
         callData
-      }, 'Failed to process ClaimMesh call');
+      }, 'Failed to process claimMesh call');
       throw error;
     }
   }

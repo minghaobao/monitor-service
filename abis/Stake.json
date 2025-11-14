@@ -8,12 +8,12 @@
       },
       {
         "internalType": "address",
-        "name": "_foundationAddr",
+        "name": "_foundationAddress",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "_governanceSafe",
+        "name": "_governanceSafeAddress",
         "type": "address"
       },
       {
@@ -42,44 +42,6 @@
       }
     ],
     "name": "APYUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "manager",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "requestedAmount",
-        "type": "uint256"
-      }
-    ],
-    "name": "AutoTopUpRequested",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "oldManager",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "newManager",
-        "type": "address"
-      }
-    ],
-    "name": "FoundationManagerUpdated",
     "type": "event"
   },
   {
@@ -131,18 +93,31 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "Paused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "uint256",
-        "name": "oldValue",
+        "name": "minAmount",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "newValue",
+        "name": "maxAmount",
         "type": "uint256"
       }
     ],
-    "name": "MinContractBalanceUpdated",
+    "name": "StakeLimitsUpdated",
     "type": "event"
   },
   {
@@ -174,6 +149,19 @@
       }
     ],
     "name": "Staked",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "Unpaused",
     "type": "event"
   },
   {
@@ -313,20 +301,7 @@
   },
   {
     "inputs": [],
-    "name": "foundationAddr",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "foundationManager",
+    "name": "foundationAddress",
     "outputs": [
       {
         "internalType": "address",
@@ -502,7 +477,7 @@
   },
   {
     "inputs": [],
-    "name": "governanceSafe",
+    "name": "governanceSafeAddress",
     "outputs": [
       {
         "internalType": "address",
@@ -533,6 +508,38 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "hasStaked",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "maxStakeAmount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "meshToken",
     "outputs": [
@@ -547,7 +554,7 @@
   },
   {
     "inputs": [],
-    "name": "minContractBalance",
+    "name": "minStakeAmount",
     "outputs": [
       {
         "internalType": "uint256",
@@ -559,16 +566,23 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_manager",
-        "type": "address"
-      }
-    ],
-    "name": "setFoundationManager",
+    "inputs": [],
+    "name": "pause",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "paused",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -588,11 +602,16 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_min",
+        "name": "_minAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maxAmount",
         "type": "uint256"
       }
     ],
-    "name": "setMinContractBalance",
+    "name": "setStakeLimits",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -641,6 +660,13 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unpause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
