@@ -287,6 +287,10 @@ model Block {
   timestamp       DateTime
   finalized       Boolean  @default(false)
   createdAt       DateTime @default(now()) @map("created_at")
+  gasUsed         BigInt?  @default(0) @map("gas_used")
+  gasLimit        BigInt?  @default(0) @map("gas_limit")
+  size            Int?     @default(0)
+  txCount         Int?     @default(0) @map("tx_count")
 
   @@unique([chainId, blockNumber])
   @@unique([chainId, blockHash])
@@ -372,35 +376,83 @@ model Anomaly {
 
 ## API接口
 
-### 1. 合约相关接口
+### 1. 数据查询API (端口3001)
+
+#### 合约相关接口
 ```typescript
 // 获取所有合约
 GET /api/contracts?chainId=97
 
 // 获取合约事件
-GET /api/contracts/:address/events?chainId=97&fromBlock=1000&toBlock=2000
+GET /api/contracts/:address/events?chainId=97&page=1&limit=50
 
 // 获取合约函数调用
-GET /api/contracts/:address/function-calls?chainId=97&fromBlock=1000&toBlock=2000
+GET /api/contracts/:address/function-calls?chainId=97&page=1&limit=50
 ```
 
-### 2. 事件相关接口
+#### 事件相关接口
 ```typescript
 // 获取最新事件
 GET /api/events/latest?chainId=97&limit=100
 
-// 获取事件统计
-GET /api/stats?chainId=97
+// 获取最新函数调用
+GET /api/function-calls/latest?chainId=97&limit=100
 ```
 
-### 3. 网络相关接口
+#### 统计信息接口
+```typescript
+// 获取统计信息
+GET /api/stats?chainId=97
+
+// 获取所有网络
+GET /api/networks
+```
+
+### 2. 监控管理API (端口3002)
+
+#### 监控状态接口
 ```typescript
 // 获取所有网络状态
-GET /api/networks
+GET /api/monitor/status
 
-// 获取网络统计
-GET /api/stats?chainId=97
+// 获取指定网络状态
+GET /api/monitor/status/:network
 ```
+
+#### 监控控制接口
+```typescript
+// 启动监控服务
+POST /api/monitor/control/start
+Body: { "network": "bsc-testnet" }
+
+// 停止监控服务
+POST /api/monitor/control/stop
+Body: { "network": "bsc-testnet" }
+
+// 重启监控服务
+POST /api/monitor/control/restart
+Body: { "network": "bsc-testnet" }
+```
+
+#### 数据查询接口
+```typescript
+// 获取区块数据
+GET /api/monitor/data/blocks?network=bsc-testnet&limit=100
+
+// 获取事件数据
+GET /api/monitor/data/events?network=bsc-testnet&limit=100
+```
+
+#### 日志接口
+```typescript
+// 获取监控日志
+GET /api/monitor/logs?network=bsc-testnet&lines=100
+
+// 获取进程输出
+GET /api/monitor/process-output?network=bsc-testnet&lines=50
+```
+
+详细API文档请参考 [API_DOCUMENTATION.md](API_DOCUMENTATION.md)
 
 ## 配置管理
 
@@ -409,6 +461,13 @@ GET /api/stats?chainId=97
 # 数据库连接
 MANAGEMENT_DATABASE_URL=mysql://root@localhost:3306/ngp_management
 MONITOR_DATABASE_URL=mysql://root@localhost:3306/ngp_monitor
+
+# 或者使用单一数据库URL（如果两个数据库相同）
+# DATABASE_URL=mysql://root@localhost:3306/ngp_db
+
+# API端口配置
+API_PORT=3001              # 数据查询API端口
+MONITOR_API_PORT=3002      # 监控管理API端口
 
 # 日志级别
 LOG_LEVEL=info
@@ -462,8 +521,11 @@ npm run cli start -- --network bsc-testnet --start-block 65574200
 # 启动所有网络
 npm run cli start -- --all
 
-# 启动API服务器
-npm run api
+# 启动数据查询API服务器（端口3001）
+npm run api-server
+
+# 启动监控管理API服务器（端口3002）
+tsx src/api-server.ts
 ```
 
 ### 4. 监控命令
@@ -474,8 +536,11 @@ npm run cli network status
 # 同步合约
 npm run cli sync-contracts -- --network bsc-testnet
 
-# 查看统计信息
-curl http://localhost:3000/api/stats?chainId=97
+# 查看统计信息（数据查询API，端口3001）
+curl http://localhost:3001/api/stats?chainId=97
+
+# 查看监控服务状态（监控管理API，端口3002）
+curl http://localhost:3002/api/monitor/status
 ```
 
 ## 开发指南
