@@ -5,10 +5,11 @@
 
 ## 📚 文档导航
 
+- [快速开始](QUICK_START.md) - 快速启动和使用指南
 - [技术文档](TECHNICAL_DOCUMENTATION.md) - 完整的系统架构和核心算法说明
-- [架构图](ARCHITECTURE_DIAGRAM.md) - 系统架构和组件关系图
 - [API文档](API_DOCUMENTATION.md) - RESTful API接口说明
 - [开发指南](DEVELOPER_GUIDE.md) - 开发、测试、部署指南
+- [PM2管理](PM2_MANAGEMENT.md) - PM2进程管理详细说明
 
 ## 🚀 快速开始
 
@@ -40,8 +41,11 @@ npx prisma db push
 # 启动BSC测试网监控
 npm run cli start -- --network bsc-testnet --start-block current
 
-# 启动API服务器
-npm run api
+# 启动API服务器（数据查询API，端口3001）
+npm run api-server
+
+# 启动监控管理API（端口3002）
+tsx src/api-server.ts
 ```
 
 ## ✨ 主要特性
@@ -101,8 +105,20 @@ npm run api
 
 ### 环境变量
 ```bash
+# 管理数据库（用于同步合约地址）
 MANAGEMENT_DATABASE_URL=mysql://root@localhost:3306/ngp_management
+
+# 监控数据库（用于存储事件和函数调用）
 MONITOR_DATABASE_URL=mysql://root@localhost:3306/ngp_monitor
+
+# 或者使用单一数据库URL（如果两个数据库相同）
+# DATABASE_URL=mysql://root@localhost:3306/ngp_db
+
+# API端口配置
+API_PORT=3001              # 数据查询API端口
+MONITOR_API_PORT=3002      # 监控管理API端口
+
+# 日志级别
 LOG_LEVEL=info
 ```
 
@@ -140,22 +156,28 @@ npm run cli sync-contracts -- --network bsc-testnet
 
 ### API调用
 ```bash
-# 获取所有合约
-curl "http://localhost:3000/api/contracts?chainId=97"
+# 获取所有合约（数据查询API，端口3001）
+curl "http://localhost:3001/api/contracts?chainId=97"
 
 # 获取合约事件
-curl "http://localhost:3000/api/contracts/0x.../events?chainId=97"
+curl "http://localhost:3001/api/contracts/0x.../events?chainId=97"
 
 # 获取统计信息
-curl "http://localhost:3000/api/stats"
+curl "http://localhost:3001/api/stats"
+
+# 获取监控服务状态（监控管理API，端口3002）
+curl "http://localhost:3002/api/monitor/status"
 ```
 
 ## 🔍 监控和运维
 
 ### 健康检查
 ```bash
-# 检查服务状态
-curl "http://localhost:3000/health"
+# 检查数据查询API状态（端口3001）
+curl "http://localhost:3001/health"
+
+# 检查监控管理API状态（端口3002）
+curl "http://localhost:3002/api/monitor/health"
 
 # 查看日志
 tail -f logs/monitor.log
